@@ -6,8 +6,9 @@ import requests
 KARTA_URL = "https://www.sarkissian.ru/karta-sayta/"
 SNAPSHOT_DIR = "snapshots"
 
-TELEGRAM_BOT_TOKEN = "8921597271:AAEHTSX9N8QeuvfT83-PxEZlaVjmGun1eIg"
-TELEGRAM_CHAT_ID = "752012309"
+# Կարդում է տվյալները GitHub-ի գաղտնի կարգավորումներից
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
 
 def run_full_audit():
