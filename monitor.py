@@ -10,6 +10,19 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
 
+def clean_html_for_hashing(html):
+    """
+    Հեռացնում է Bitrix CMS-ի ինքնաբերաբար ներարկվող դինամիկ արժեքները
+    (nocache timestamp, SERVER_TIME, bitrix_sessid), որոնք փոխվում են
+    ամեն request-ի ժամանակ՝ անկախ իրական բովանդակության փոփոխությունից։
+    Առանց սրա՝ hash-ը երբեք կայուն չի մնում։
+    """
+    html = re.sub(r'nocache=\d+', 'nocache=X', html)
+    html = re.sub(r"'SERVER_TIME':'\d+'", "'SERVER_TIME':'X'", html)
+    html = re.sub(r"'bitrix_sessid':'[a-f0-9]+'", "'bitrix_sessid':'X'", html)
+    return html
+
+
 def send_telegram_message(text):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("Telegram token/chat_id սահմանված չէ, հաղորդագրություն չի ուղարկվում։")
@@ -69,8 +82,9 @@ def run_full_audit():
                 page_res = requests.get(url, headers=headers, timeout=10)
                 if page_res.status_code == 200:
                     current_html = page_res.text
+                    cleaned_html = clean_html_for_hashing(current_html)
                     current_hash = hashlib.md5(
-                        current_html.encode("utf-8")
+                        cleaned_html.encode("utf-8")
                     ).hexdigest()
 
                     safe_filename = (
@@ -104,8 +118,29 @@ def run_full_audit():
                 continue
 
         if changed_pages:
-            message = "Կայքում փոփոխություններ են հայտնաբերվել.\n\n" + "\n".join(changed_pages)
-            send_telegram_message(message)
+            header = "Կայքում փոփոխություններ են հայտնաբերվել.\n\n"
+            body = "\n".join(changed_pages)
+            full_message = header + body
+
+            TELEGRAM_LIMIT = 4000  # մի փոքր marge 4096-ի սահմանից
+
+            if len(full_message) <= TELEGRAM_LIMIT:
+                send_telegram_message(full_message)
+            else:
+                # Երկար ցուցակը բաժանում ենք մի քանի հաղորդագրության
+                chunk = header
+                part_num = 1
+                for url in changed_pages:
+                    if len(chunk) + len(url) + 1 > TELEGRAM_LIMIT:
+                        send_telegram_message(f"[{part_num}] " + chunk)
+                        part_num += 1
+                        chunk = ""
+                    chunk += url + "\n"
+                if chunk.strip():
+                    send_telegram_message(f"[{part_num}] " + chunk)
+
+                print(f"⚠️ Ընդամենը {len(changed_pages)} էջ է փոփոխված համարվել "
+                      f"(հաղորդագրությունը բաժանվեց {part_num} մասի)")
         else:
             print("Փոփոխություններ չեն հայտնաբերվել։")
 
