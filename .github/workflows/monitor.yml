@@ -1,0 +1,40 @@
+name: Website Monitor
+
+on:
+  schedule:
+    # Ամեն օր՝ 08:00 Երևանի ժամանակով (UTC+4, ամռանը UTC+4)
+    # cron-ը UTC-ով է, ուստի 04:00 UTC = 08:00 Yerevan
+    - cron: "0 4 * * *"
+  workflow_dispatch: {}  # հնարավորություն է տալիս ձեռքով էլ գործարկել
+
+permissions:
+  contents: write  # անհրաժեշտ է snapshots-ը commit անելու համար
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run monitor script
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python monitor.py
+
+      - name: Commit updated snapshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add snapshots/
+          git diff --cached --quiet || git commit -m "Update snapshots [automated]"
+          git push
