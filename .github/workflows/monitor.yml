@@ -2,16 +2,20 @@ name: Sarkissian Site Monitor
 
 on:
   schedule:
-    # Աշխատելու է ամեն օր Երևանի ժամանակով առավոտյան 07:00-ին (UTC-ով՝ 03:00-ին)
-    - cron: '0 3 * * *'
-  workflow_dispatch: # Թույլ է տալիս ձեռքով միացնել կոճակով
+    - cron: '0 3 * * *'  # Ամեն օր Երևանի ժամանակով առավոտյան 07:00-ին
+  workflow_dispatch:      # Թույլ է տալիս ձեռքով գործարկել
 
 jobs:
   run-monitor:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Քաշում է ամբողջական պատմությունը՝ կոնֆլիկտները բացառելու համար
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -22,18 +26,26 @@ jobs:
         run: |
           pip install requests
 
-      - name: Run script
+      - name: Run monitoring script
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           python monitor.py
 
-      - name: Save snapshots back to repo
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Update site snapshots automatically"
-          branch: main
-          pull_strategy: 'NO_PULL'
-          push_options: '--force'
-          skip_ci: true
+      - name: Commit and push snapshots safely
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Նախ զգուշորեն թարմացնում ենք տեղական ճյուղը հեռավորից եկած փոփոխություններով
+          git pull origin main --rebase || true
+          
+          # Ավելացնում ենք նոր կամ փոփոխված snapshot ֆայլերը
+          git add snapshots/
+          
+          # Ստուգում ենք՝ արդյոք կան փոփոխություններ պահպանելու համար
+          git diff --staged --quiet || git commit -m "Update site snapshots automatically"
+          
+          # Ուղարկում ենք GitHub առանց խնդիրների
+          git push origin main
