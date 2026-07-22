@@ -2,20 +2,16 @@ name: Sarkissian Site Monitor
 
 on:
   schedule:
-    - cron: '0 3 * * *'  # Ամեն օր Երևանի ժամանակով առավոտյան 07:00-ին
-  workflow_dispatch:      # Թույլ է տալիս ձեռքով գործարկել
+    - cron: '0 3 * * *'  # Ամեն օր 
+  workflow_dispatch:      # Ձեռքով գործարկելու հնարավորություն
 
 jobs:
   run-monitor:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Քաշում է ամբողջական պատմությունը՝ կոնֆլիկտները բացառելու համար
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -32,20 +28,3 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           python monitor.py
-
-      - name: Commit and push snapshots safely
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
-          # Նախ զգուշորեն թարմացնում ենք տեղական ճյուղը հեռավորից եկած փոփոխություններով
-          git pull origin main --rebase || true
-          
-          # Ավելացնում ենք նոր կամ փոփոխված snapshot ֆայլերը
-          git add snapshots/
-          
-          # Ստուգում ենք՝ արդյոք կան փոփոխություններ պահպանելու համար
-          git diff --staged --quiet || git commit -m "Update site snapshots automatically"
-          
-          # Ուղարկում ենք GitHub առանց խնդիրների
-          git push origin main
