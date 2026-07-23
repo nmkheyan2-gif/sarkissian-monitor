@@ -21,7 +21,7 @@ RETRY_BACKOFF = 3       # վրկ, ամեն retry-ի հետ աճում է (3, 6, 
 # ընթացքում (cache-ի պատճառով) և մեզ համար noise է, բայց որոնց ԱՌԿԱՅՈՒԹՅՈՒՆԸ
 # ինքնին (կա՞, թե՞ ոչ էջում) կարևոր ազդանշան է, որ պետք է հետևել։
 WIDGET_SELECTORS = {
-    "menuCat": "div.menuCat",              # կայքի navigation dropdown մենյուն
+    "menuTop": "nav.menuTop",              # ամբողջ mega-menu (նավ. + ապրանքային preview)
     "bx_filter_block": "div.bx-filter-block",  # Bitrix Smart Filter widget
 }
 
