@@ -919,6 +919,7 @@ High Jewelry
 Деловые
 Дизайнерские
 Желтые бриллианты
+Итальянский замок
 Капсула "Гранаты"
 Капсула "Черный оникс"
 Капсула "Эликсиры"
@@ -1468,6 +1469,119 @@ Array
 Серебряное кольцо «Малахитовое Сияние Ночи»
 К товару
 Быстрый просмотр
+Предзаказ
+194 100 ₽
+Серебряное кольцо "Эликсир Уверенности"
+К товару
+Быстрый просмотр
+185 700 ₽
+Серебряное кольцо "Эликсир Благодарности"
+К товару
+Быстрый просмотр
+Предзаказ
+136 700 ₽
+Серебряное кольцо "Эликсир Ясности"
+К товару
+Быстрый просмотр
+Предзаказ
+115 700 ₽
+Серебряное кольцо "Эликсир Счастья"
+К товару
+Быстрый просмотр
+Array
+(
+[0] => Array
+(
+[ID] => 1863
+[NAME] => Этника
+[PICTURE] => 27554
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/serebro/etnika/
+)
+[1] => Array
+(
+[ID] => 1864
+[NAME] => Лаконичная
+[PICTURE] => 23490
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/serebro/lakonichnaya/
+)
+[2] => Array
+(
+[ID] => 1866
+[NAME] => Базовая
+[PICTURE] => 27545
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/serebro/bazovaya/
+)
+[3] => Array
+(
+[ID] => 1868
+[NAME] => Креативная
+[PICTURE] => 23449
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/serebro/kreativnaya/
+)
+[4] => Array
+(
+[ID] => 1867
+[NAME] => Фактурные
+[PICTURE] => 27529
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/serebro/fakturnye/
+)
+[5] => Array
+(
+[ID] => 1869
+[NAME] => Флора и Фауна
+[PICTURE] => 27555
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/serebro/flora-i-fauna/
+)
+[6] => Array
+(
+[ID] => 1870
+[NAME] => Vibes
+[PICTURE] => 23469
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/serebro/vaybs/
+)
+[7] => Array
+(
+[ID] => 1871
+[NAME] => Капсула «Эликсиры»
+[PICTURE] => 23401
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/serebro/eliksiry/
+)
+[8] => Array
+(
+[ID] => 2647
+[NAME] => Высокие кольца
+[PICTURE] =>
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/koltsa/vysokie-kolcza/
+)
+[9] => Array
+(
+[ID] => 1872
+[NAME] => Капсула «Гранаты»
+[PICTURE] => 23475
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/serebro/kapsula-granaty/
+)
+)
+Креативная
+Посмотреть
+195 500 ₽
+Серебряное кольцо "Эликсир Блаженства"
+К товару
+Быстрый просмотр
+Предзаказ
+168 700 ₽
+Серебряное кольцо "Эликсир Бесконечности"
+К товару
+Быстрый просмотр
 211 100 ₽
 Серебряное кольцо "Эликсир Отрады"
 К товару
@@ -1567,7 +1681,7 @@ Array
 [UF_LINK_MENU] => /catalog/collection/serebro/kapsula-granaty/
 )
 )
-Креативная
+Фактурные
 Посмотреть
 13 900 ₽
 Серебряное кольцо «Белоснежный Мотив»
@@ -1676,7 +1790,7 @@ Array
 [UF_LINK_MENU] => /catalog/collection/serebro/kapsula-granaty/
 )
 )
-Фактурные
+Флора и Фауна
 Посмотреть
 20 700 ₽
 Кольцо из серебра с камнем питерсит
@@ -1785,7 +1899,7 @@ Array
 [UF_LINK_MENU] => /catalog/collection/serebro/kapsula-granaty/
 )
 )
-Флора и Фауна
+Vibes
 Посмотреть
 23 500 ₽
 Кольцо из серебра с камнем ларимар
@@ -1797,115 +1911,6 @@ Array
 Быстрый просмотр
 13 900 ₽
 Серебряное кольцо «Терракота»
-К товару
-Быстрый просмотр
-18 900 ₽
-Серебряное кольцо «Нежность»
-К товару
-Быстрый просмотр
-27 600 ₽
-Серебряное кольцо «Пурпурная Галактика»
-К товару
-Быстрый просмотр
-18 400 ₽
-Серебряное кольцо «Нефритовый Твид»
-К товару
-Быстрый просмотр
-Array
-(
-[0] => Array
-(
-[ID] => 1863
-[NAME] => Этника
-[PICTURE] => 27554
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/serebro/etnika/
-)
-[1] => Array
-(
-[ID] => 1864
-[NAME] => Лаконичная
-[PICTURE] => 23490
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/serebro/lakonichnaya/
-)
-[2] => Array
-(
-[ID] => 1866
-[NAME] => Базовая
-[PICTURE] => 27545
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/serebro/bazovaya/
-)
-[3] => Array
-(
-[ID] => 1868
-[NAME] => Креативная
-[PICTURE] => 23449
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/serebro/kreativnaya/
-)
-[4] => Array
-(
-[ID] => 1867
-[NAME] => Фактурные
-[PICTURE] => 27529
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/serebro/fakturnye/
-)
-[5] => Array
-(
-[ID] => 1869
-[NAME] => Флора и Фауна
-[PICTURE] => 27555
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/serebro/flora-i-fauna/
-)
-[6] => Array
-(
-[ID] => 1870
-[NAME] => Vibes
-[PICTURE] => 23469
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/serebro/vaybs/
-)
-[7] => Array
-(
-[ID] => 1871
-[NAME] => Капсула «Эликсиры»
-[PICTURE] => 23401
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/serebro/eliksiry/
-)
-[8] => Array
-(
-[ID] => 2647
-[NAME] => Высокие кольца
-[PICTURE] =>
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/koltsa/vysokie-kolcza/
-)
-[9] => Array
-(
-[ID] => 1872
-[NAME] => Капсула «Гранаты»
-[PICTURE] => 23475
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/serebro/kapsula-granaty/
-)
-)
-Vibes
-Посмотреть
-27 600 ₽
-Серебряное кольцо «Галактика»
-К товару
-Быстрый просмотр
-20 800 ₽
-Серебряное кольцо «Сияющий Покров»
-К товару
-Быстрый просмотр
-16 600 ₽
-Серебряное кольцо «Лазуритовый Мотив»
 К товару
 Быстрый просмотр
 1
@@ -1928,6 +1933,10 @@ Vibes
 Быстрый просмотр
 23 500 ₽
 Серебряное кольцо «Лунный Сателлит»
+К товару
+Быстрый просмотр
+34 900 ₽
+Серебряное кольцо «Океан Грез»
 К товару
 Быстрый просмотр
 12 900 ₽
@@ -1960,9 +1969,6 @@ Vibes
 Быстрый просмотр
 24 500 ₽
 Серебряное кольцо «Серафинитовый Крест»
-К товару
-Быстрый просмотр
-Кольцо из серебра с камнем турмалин
 К товару
 Быстрый просмотр
 Большие серебряные кольца

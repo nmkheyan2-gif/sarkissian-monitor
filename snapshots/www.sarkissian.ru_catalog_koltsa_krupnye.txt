@@ -918,7 +918,6 @@ High Jewelry
 Деловые
 Дизайнерские
 Желтые бриллианты
-Итальянский замок
 Капсула "Гранаты"
 Капсула "Черный оникс"
 Капсула "Эликсиры"
@@ -1469,119 +1468,6 @@ Array
 Серебряное кольцо «Малахитовое Сияние Ночи»
 К товару
 Быстрый просмотр
-Предзаказ
-194 100 ₽
-Серебряное кольцо "Эликсир Уверенности"
-К товару
-Быстрый просмотр
-185 700 ₽
-Серебряное кольцо "Эликсир Благодарности"
-К товару
-Быстрый просмотр
-Предзаказ
-136 700 ₽
-Серебряное кольцо "Эликсир Ясности"
-К товару
-Быстрый просмотр
-Array
-(
-[0] => Array
-(
-[ID] => 2634
-[NAME] => High Jewelry
-[PICTURE] => 23406
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/zoloto/high-jewelry/
-)
-[1] => Array
-(
-[ID] => 1875
-[NAME] => Классика
-[PICTURE] => 16809
-[DESCRIPTION] => Драгоценности классического дизайна
-[UF_LINK_MENU] => /catalog/collection/zoloto/klassika/
-)
-[2] => Array
-(
-[ID] => 1876
-[NAME] => Дизайнерские
-[PICTURE] => 23407
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/zoloto/dizaynerskie/
-)
-[3] => Array
-(
-[ID] => 1877
-[NAME] => Помолвка
-[PICTURE] => 27533
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/zoloto/pomolvka/
-)
-[4] => Array
-(
-[ID] => 1878
-[NAME] => Обручальные
-[PICTURE] => 23413
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/zoloto/obruchalnye/
-)
-[5] => Array
-(
-[ID] => 1880
-[NAME] => Только бриллианты
-[PICTURE] => 23425
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/zoloto/tolko-brillianty/
-)
-[6] => Array
-(
-[ID] => 1881
-[NAME] => Редкие камни
-[PICTURE] => 23409
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/zoloto/redkiye-kamni/
-)
-[7] => Array
-(
-[ID] => 1882
-[NAME] => Деловые
-[PICTURE] => 27541
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/zoloto/delovye/
-)
-[8] => Array
-(
-[ID] => 1883
-[NAME] => Коктейльные
-[PICTURE] => 23420
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/zoloto/kokteylnye/
-)
-[9] => Array
-(
-[ID] => 1885
-[NAME] => Вечерние
-[PICTURE] => 27538
-[DESCRIPTION] =>
-[UF_LINK_MENU] => /catalog/collection/zoloto/vechernie/
-)
-)
-Помолвка
-Посмотреть
-Предзаказ
-115 700 ₽
-Серебряное кольцо "Эликсир Счастья"
-К товару
-Быстрый просмотр
-195 500 ₽
-Серебряное кольцо "Эликсир Блаженства"
-К товару
-Быстрый просмотр
-Предзаказ
-168 700 ₽
-Серебряное кольцо "Эликсир Бесконечности"
-К товару
-Быстрый просмотр
 211 100 ₽
 Серебряное кольцо "Эликсир Отрады"
 К товару
@@ -1677,7 +1563,7 @@ Array
 [UF_LINK_MENU] => /catalog/collection/zoloto/vechernie/
 )
 )
-Обручальные
+Помолвка
 Посмотреть
 24 500 ₽
 Серебряное кольцо «Атласный Крест»
@@ -1786,7 +1672,7 @@ Array
 [UF_LINK_MENU] => /catalog/collection/zoloto/vechernie/
 )
 )
-Только бриллианты
+Обручальные
 Посмотреть
 24 500 ₽
 Серебряное кольцо «Розовый Крест»
@@ -1895,7 +1781,7 @@ Array
 [UF_LINK_MENU] => /catalog/collection/zoloto/vechernie/
 )
 )
-Редкие камни
+Только бриллианты
 Посмотреть
 17 600 ₽
 Кольцо из серебра с камнем родохрозит
@@ -1907,6 +1793,115 @@ Array
 Быстрый просмотр
 12 900 ₽
 Серебряное кольцо «Садовый Мотив»
+К товару
+Быстрый просмотр
+23 500 ₽
+Кольцо из серебра с камнем ларимар
+К товару
+Быстрый просмотр
+18 600 ₽
+Серебряное кольцо «Тайна Древней Горы»
+К товару
+Быстрый просмотр
+13 900 ₽
+Серебряное кольцо «Терракота»
+К товару
+Быстрый просмотр
+Array
+(
+[0] => Array
+(
+[ID] => 2634
+[NAME] => High Jewelry
+[PICTURE] => 23406
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/zoloto/high-jewelry/
+)
+[1] => Array
+(
+[ID] => 1875
+[NAME] => Классика
+[PICTURE] => 16809
+[DESCRIPTION] => Драгоценности классического дизайна
+[UF_LINK_MENU] => /catalog/collection/zoloto/klassika/
+)
+[2] => Array
+(
+[ID] => 1876
+[NAME] => Дизайнерские
+[PICTURE] => 23407
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/zoloto/dizaynerskie/
+)
+[3] => Array
+(
+[ID] => 1877
+[NAME] => Помолвка
+[PICTURE] => 27533
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/zoloto/pomolvka/
+)
+[4] => Array
+(
+[ID] => 1878
+[NAME] => Обручальные
+[PICTURE] => 23413
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/zoloto/obruchalnye/
+)
+[5] => Array
+(
+[ID] => 1880
+[NAME] => Только бриллианты
+[PICTURE] => 23425
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/zoloto/tolko-brillianty/
+)
+[6] => Array
+(
+[ID] => 1881
+[NAME] => Редкие камни
+[PICTURE] => 23409
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/zoloto/redkiye-kamni/
+)
+[7] => Array
+(
+[ID] => 1882
+[NAME] => Деловые
+[PICTURE] => 27541
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/zoloto/delovye/
+)
+[8] => Array
+(
+[ID] => 1883
+[NAME] => Коктейльные
+[PICTURE] => 23420
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/zoloto/kokteylnye/
+)
+[9] => Array
+(
+[ID] => 1885
+[NAME] => Вечерние
+[PICTURE] => 27538
+[DESCRIPTION] =>
+[UF_LINK_MENU] => /catalog/collection/zoloto/vechernie/
+)
+)
+Редкие камни
+Посмотреть
+18 900 ₽
+Серебряное кольцо «Нежность»
+К товару
+Быстрый просмотр
+27 600 ₽
+Серебряное кольцо «Пурпурная Галактика»
+К товару
+Быстрый просмотр
+18 400 ₽
+Серебряное кольцо «Нефритовый Твид»
 К товару
 Быстрый просмотр
 1
@@ -1929,10 +1924,6 @@ Array
 Быстрый просмотр
 24 800 ₽
 Серебряное кольцо «Лазурная Завеса»
-К товару
-Быстрый просмотр
-195 500 ₽
-Серебряное кольцо "Эликсир Блаженства"
 К товару
 Быстрый просмотр
 131 700 ₽
@@ -1965,6 +1956,10 @@ Array
 Быстрый просмотр
 24 500 ₽
 Серебряное кольцо «Лазурный Крест»
+К товару
+Быстрый просмотр
+27 600 ₽
+Серебряное кольцо «Галактика»
 К товару
 Быстрый просмотр
 Крупные кольца
