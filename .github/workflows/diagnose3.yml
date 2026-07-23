@@ -18,5 +18,5 @@ jobs:
       - name: Install dependencies
         run: pip install requests beautifulsoup4
 
-      - name: Run diagnose4 script
-        run: python diagnose4.py
+      - name: Run diagnose5 script
+        run: python diagnose5.py
