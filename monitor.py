@@ -1,6 +1,7 @@
 import difflib
 import os
 import re
+import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,6 +13,10 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
 TELEGRAM_LIMIT = 3500  # մի փոքր marge Telegram-ի 4096 նիշանոց սահմանից
+PAGE_TIMEOUT = 20       # նախկինում 10 վրկ էր, մեծացրինք մեծ էջերի համար
+MAX_RETRIES = 3         # timeout/կապի սխալի դեպքում քանի անգամ փորձել
+RETRY_BACKOFF = 3       # վրկ, ամեն retry-ի հետ աճում է (3, 6, 9...)
+
 
 
 def extract_visible_text(html):
@@ -29,6 +34,26 @@ def extract_visible_text(html):
     lines = [line.strip() for line in text.splitlines()]
     lines = [line for line in lines if line]
     return "\n".join(lines)
+
+
+def fetch_with_retry(url, headers):
+    """
+    Փորձում է fetch անել URL-ը մինչև MAX_RETRIES անգամ, timeout/կապի
+    սխալի դեպքում սպասելով աճող ընդմիջումով (3, 6, 9 վրկ) նախքան
+    հաջորդ փորձը։ Վերադարձնում է response-ը կամ վերբարձրացնում է
+    վերջին սխալը, եթե բոլոր փորձերը ձախողվեն։
+    """
+    last_exception = None
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            return requests.get(url, headers=headers, timeout=PAGE_TIMEOUT)
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            last_exception = e
+            if attempt < MAX_RETRIES:
+                wait = RETRY_BACKOFF * attempt
+                print(f"  Փորձ {attempt}/{MAX_RETRIES} ձախողվեց ({e}), սպասում ենք {wait} վրկ...")
+                time.sleep(wait)
+    raise last_exception
 
 
 def send_telegram_message(text):
@@ -108,7 +133,7 @@ def run_full_audit():
 
             print(f"Ստուգվում է՝ {url}")
             try:
-                page_res = requests.get(url, headers=headers, timeout=10)
+                page_res = fetch_with_retry(url, headers)
                 if page_res.status_code == 200:
                     current_text = extract_visible_text(page_res.text)
 
@@ -142,6 +167,8 @@ def run_full_audit():
             except Exception as e:
                 print(f"Սխալ {url} էջը ստուգելիս: {e}")
                 continue
+
+            time.sleep(0.3)  # փոքր ուշացում՝ սերվերը շատ արագ չծանրաբեռնելու համար
 
         if changed_messages:
             print(f"\nԸնդամենը {len(changed_messages)} էջ է իրապես փոփոխված համարվել։")
