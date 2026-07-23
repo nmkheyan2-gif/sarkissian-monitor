@@ -140,7 +140,7 @@ def run_full_audit():
     changed_messages = []
 
     try:
-        response = requests.get(KARTA_URL, headers=headers, timeout=15)
+        response = fetch_with_retry(KARTA_URL, headers)
         print(f"Քարտեզի էջի պատասխանի կոդը: {response.status_code}")
         if response.status_code != 200:
             print("Սխալ: Հնարավոր չեղավ բեռնել քարտեզի էջը:")
