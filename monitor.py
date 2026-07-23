@@ -26,6 +26,37 @@ WIDGET_SELECTORS = {
 }
 
 
+def strip_php_array_dumps(text):
+    """
+    Հեռացնում է PHP-ի var_dump/print_r style array leak-երը (Array( ... ))
+    տող-ըստ-տող parsing-ով, ճիշտ հաշվելով nested փակագծերի խորությունը։
+    Ավելի հուսալի է, քան regex-ը, քանի որ ճիշտ է մշակում ցանկացած
+    խորությամբ nested array-ներ (նախորդ non-greedy regex-ը թողնում էր
+    բեկորներ խորը nested structure-ների դեպքում)։
+    """
+    lines = text.split("\n")
+    result = []
+    i = 0
+    while i < len(lines):
+        if lines[i].strip() == "Array" and i + 1 < len(lines) and lines[i + 1].strip() == "(":
+            depth = 0
+            i += 1
+            while i < len(lines):
+                stripped = lines[i].strip()
+                if stripped == "(":
+                    depth += 1
+                elif stripped == ")":
+                    depth -= 1
+                    if depth == 0:
+                        i += 1
+                        break
+                i += 1
+            continue
+        result.append(lines[i])
+        i += 1
+    return "\n".join(result)
+
+
 def extract_page_data(html):
     """
     Վերադարձնում է dict՝
@@ -36,7 +67,6 @@ def extract_page_data(html):
     soup = BeautifulSoup(html, "html.parser")
     for tag in soup(["script", "style", "noscript"]):
         tag.decompose()
-
     flag_parts = []
     for name, selector in WIDGET_SELECTORS.items():
         present = bool(soup.select(selector))
@@ -44,39 +74,12 @@ def extract_page_data(html):
         for tag in soup.select(selector):
             tag.decompose()
     flags = ";".join(flag_parts)
-
     text = soup.get_text(separator="\n")
     lines = [line.strip() for line in text.splitlines()]
     lines = [line for line in lines if line]
     joined = "\n".join(lines)
-
-    # Կայքի PHP-ի var_dump/print_r style debug leak-ը (Array( [0] => Array( ... )))
-    # երբեմն արտահոսում է HTML-ի մեջ։ Սա իրական bug է կայքում, բայց մեզ համար
-    # ընդամենը noise է, որ պիտի հեռացնել diff-ից։
-    joined = re.sub(r"Array\n\(\n(?:[^\n]*\n)*?\)\n", "", joined)
-
+    joined = strip_php_array_dumps(joined)
     return {"text": joined, "flags": flags}
-
-
-def fetch_with_retry(url, headers):
-    """
-    Փորձում է fetch անել URL-ը մինչև MAX_RETRIES անգամ, timeout/կապի
-    սխալի դեպքում սպասելով աճող ընդմիջումով (3, 6, 9 վրկ) նախքան
-    հաջորդ փորձը։ Վերադարձնում է response-ը կամ վերբարձրացնում է
-    վերջին սխալը, եթե բոլոր փորձերը ձախողվեն։
-    """
-    last_exception = None
-    for attempt in range(1, MAX_RETRIES + 1):
-        try:
-            return requests.get(url, headers=headers, timeout=PAGE_TIMEOUT)
-        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
-            last_exception = e
-            if attempt < MAX_RETRIES:
-                wait = RETRY_BACKOFF * attempt
-                print(f"  Փորձ {attempt}/{MAX_RETRIES} ձախողվեց ({e}), սպասում ենք {wait} վրկ...")
-                time.sleep(wait)
-    raise last_exception
-
 
 def send_telegram_message(text):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
