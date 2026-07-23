@@ -1,26 +1,34 @@
-import hashlib
+import difflib
 import os
 import re
+
 import requests
+from bs4 import BeautifulSoup
 
 KARTA_URL = "https://www.sarkissian.ru/karta-sayta/"
-SNAPSHOT_DIR = "snapshots"
+SNAPSHOT_DIR = "snapshots"  # այստեղ այժմ պահվում է տեսանելի տեքստը, ոչ թե hash
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
+TELEGRAM_LIMIT = 3500  # մի փոքր marge Telegram-ի 4096 նիշանոց սահմանից
 
-def clean_html_for_hashing(html):
+
+def extract_visible_text(html):
     """
-    Հեռացնում է Bitrix CMS-ի ինքնաբերաբար ներարկվող դինամիկ արժեքները
-    (nocache timestamp, SERVER_TIME, bitrix_sessid), որոնք փոխվում են
-    ամեն request-ի ժամանակ՝ անկախ իրական բովանդակության փոփոխությունից։
-    Առանց սրա՝ hash-ը երբեք կայուն չի մնում։
+    Հանում է էջի իրական, տեսանելի տեքստը՝ ամբողջությամբ հեռացնելով
+    <script>, <style>, <noscript> tag-երը։ Սա ինքնաբերաբար լուծում է
+    Bitrix-ի դինամիկ token-ների (nocache, SERVER_TIME, bitrix_sessid)
+    խնդիրը, քանի որ դրանք բոլորը գտնվում են <script> tag-երի մեջ,
+    որոնք այստեղ ամբողջությամբ դեն են նետվում։
     """
-    html = re.sub(r'nocache=\d+', 'nocache=X', html)
-    html = re.sub(r"'SERVER_TIME':'\d+'", "'SERVER_TIME':'X'", html)
-    html = re.sub(r"'bitrix_sessid':'[a-f0-9]+'", "'bitrix_sessid':'X'", html)
-    return html
+    soup = BeautifulSoup(html, "html.parser")
+    for tag in soup(["script", "style", "noscript"]):
+        tag.decompose()
+    text = soup.get_text(separator="\n")
+    lines = [line.strip() for line in text.splitlines()]
+    lines = [line for line in lines if line]
+    return "\n".join(lines)
 
 
 def send_telegram_message(text):
@@ -36,6 +44,27 @@ def send_telegram_message(text):
         print(f"Telegram ուղարկելիս սխալ: {e}")
 
 
+def build_diff_message(url, old_text, new_text):
+    """
+    Կառուցում է մարդամոտ հաղորդագրություն, որը ցույց է տալիս կոնկրետ
+    թե ինչ տողեր են ավելացվել և ինչ տողեր են հեռացվել։
+    """
+    old_lines = old_text.splitlines()
+    new_lines = new_text.splitlines()
+
+    diff = list(difflib.unified_diff(old_lines, new_lines, lineterm="", n=0))
+    added = [l[1:].strip() for l in diff if l.startswith("+") and not l.startswith("+++")]
+    removed = [l[1:].strip() for l in diff if l.startswith("-") and not l.startswith("---")]
+
+    message = f"🔔 Փոփոխություն՝ {url}\n\n"
+    if added:
+        message += "➕ Ավելացվել է.\n" + "\n".join(f"  {l}" for l in added) + "\n\n"
+    if removed:
+        message += "➖ Հեռացվել է.\n" + "\n".join(f"  {l}" for l in removed) + "\n\n"
+
+    return message.strip()
+
+
 def run_full_audit():
     print("1. Սկսվում է կայքի քարտեզի ներբեռնումը...")
     if not os.path.exists(SNAPSHOT_DIR):
@@ -47,7 +76,7 @@ def run_full_audit():
         )
     }
 
-    changed_pages = []
+    changed_messages = []
 
     try:
         response = requests.get(KARTA_URL, headers=headers, timeout=15)
@@ -81,11 +110,7 @@ def run_full_audit():
             try:
                 page_res = requests.get(url, headers=headers, timeout=10)
                 if page_res.status_code == 200:
-                    current_html = page_res.text
-                    cleaned_html = clean_html_for_hashing(current_html)
-                    current_hash = hashlib.md5(
-                        cleaned_html.encode("utf-8")
-                    ).hexdigest()
+                    current_text = extract_visible_text(page_res.text)
 
                     safe_filename = (
                         url.replace("https://", "")
@@ -100,47 +125,39 @@ def run_full_audit():
                         SNAPSHOT_DIR, f"{safe_filename}.txt")
 
                     if os.path.exists(snapshot_file):
-                        with open(snapshot_file, "r") as f:
-                            old_hash = f.read().strip()
+                        with open(snapshot_file, "r", encoding="utf-8") as f:
+                            old_text = f.read()
 
-                        if old_hash != current_hash:
+                        if old_text != current_text:
                             print(f"Փոփոխություն հայտնաբերվեց՝ {url}")
-                            changed_pages.append(url)
-                            with open(snapshot_file, "w") as f:
-                                f.write(current_hash)
+                            diff_message = build_diff_message(url, old_text, current_text)
+                            changed_messages.append(diff_message)
+                            with open(snapshot_file, "w", encoding="utf-8") as f:
+                                f.write(current_text)
                     else:
-                        with open(snapshot_file, "w") as f:
-                            f.write(current_hash)
+                        with open(snapshot_file, "w", encoding="utf-8") as f:
+                            f.write(current_text)
                         print(f"Պահպանվեց (առաջին անգամ)՝ {safe_filename}.txt")
 
             except Exception as e:
                 print(f"Սխալ {url} էջը ստուգելիս: {e}")
                 continue
 
-        if changed_pages:
-            header = "Կայքում փոփոխություններ են հայտնաբերվել.\n\n"
-            body = "\n".join(changed_pages)
-            full_message = header + body
-
-            TELEGRAM_LIMIT = 4000  # մի փոքր marge 4096-ի սահմանից
-
-            if len(full_message) <= TELEGRAM_LIMIT:
-                send_telegram_message(full_message)
-            else:
-                # Երկար ցուցակը բաժանում ենք մի քանի հաղորդագրության
-                chunk = header
-                part_num = 1
-                for url in changed_pages:
-                    if len(chunk) + len(url) + 1 > TELEGRAM_LIMIT:
-                        send_telegram_message(f"[{part_num}] " + chunk)
-                        part_num += 1
-                        chunk = ""
-                    chunk += url + "\n"
-                if chunk.strip():
-                    send_telegram_message(f"[{part_num}] " + chunk)
-
-                print(f"⚠️ Ընդամենը {len(changed_pages)} էջ է փոփոխված համարվել "
-                      f"(հաղորդագրությունը բաժանվեց {part_num} մասի)")
+        if changed_messages:
+            print(f"\nԸնդամենը {len(changed_messages)} էջ է իրապես փոփոխված համարվել։")
+            # Ամեն փոփոխված էջի համար ուղարկում ենք առանձին հաղորդագրություն
+            # (կամ խմբավորում ենք մինչև Telegram-ի սահմանաչափը)
+            batch = ""
+            for msg in changed_messages:
+                if len(msg) > TELEGRAM_LIMIT:
+                    # Այս կոնկրետ էջի diff-ը ինքնին շատ մեծ է, կրճատում ենք
+                    msg = msg[:TELEGRAM_LIMIT] + "\n... (կրճատված)"
+                if len(batch) + len(msg) + 2 > TELEGRAM_LIMIT:
+                    send_telegram_message(batch)
+                    batch = ""
+                batch += msg + "\n\n"
+            if batch.strip():
+                send_telegram_message(batch)
         else:
             print("Փոփոխություններ չեն հայտնաբերվել։")
 
