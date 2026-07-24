@@ -81,6 +81,25 @@ def extract_page_data(html):
     joined = strip_php_array_dumps(joined)
     return {"text": joined, "flags": flags}
 
+
+def fetch_with_retry(url, headers):
+    """
+    Փորձում է fetch անել URL-ը մինչև MAX_RETRIES անգամ, timeout/կապի
+    սխալի դեպքում սպասելով աճող ընդմիջումով (3, 6, 9 վրկ) նախքան
+    հաջորդ փորձը։ Վերադարձնում է response-ը կամ վերբարձրացնում է
+    վերջին սխալը, եթե բոլոր փորձերը ձախողվեն։
+    """
+    last_exception = None
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            return requests.get(url, headers=headers, timeout=PAGE_TIMEOUT)
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            last_exception = e
+            if attempt < MAX_RETRIES:
+                wait = RETRY_BACKOFF * attempt
+                print(f"  Փորձ {attempt}/{MAX_RETRIES} ձախողվեց ({e}), սպասում ենք {wait} վրկ...")
+                time.sleep(wait)
+    raise last_exception
 def send_telegram_message(text):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("Telegram token/chat_id սահմանված չէ, հաղորդագրություն չի ուղարկվում։")
