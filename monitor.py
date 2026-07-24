@@ -1,4 +1,5 @@
 import difflib
+from collections import Counter
 import os
 import re
 import time
@@ -114,13 +115,20 @@ def send_telegram_message(text):
 
 
 def build_text_diff_message(url, old_text, new_text):
-    """Ցույց է տալիս կոնկրետ թե ինչ տողեր են ավելացվել/հեռացվել։"""
+    """
+    Ցույց է տալիս կոնկրետ թե ինչ տողեր են ավելացվել/հեռացվել՝
+    multiset (Counter) համեմատությամբ, ոչ թե sequential diff-ով։
+    Սա անտեսում է պարզ reordering-ը (carousel/random rotation), բայց
+    դեռ ճշգրիտ հայտնաբերում է իրական ավելացումներ/հեռացումներ։
+    """
     old_lines = old_text.splitlines()
     new_lines = new_text.splitlines()
 
-    diff = list(difflib.unified_diff(old_lines, new_lines, lineterm="", n=0))
-    added = [l[1:].strip() for l in diff if l.startswith("+") and not l.startswith("+++")]
-    removed = [l[1:].strip() for l in diff if l.startswith("-") and not l.startswith("---")]
+    old_counter = Counter(old_lines)
+    new_counter = Counter(new_lines)
+
+    added = list((new_counter - old_counter).elements())
+    removed = list((old_counter - new_counter).elements())
 
     message = ""
     if added:
@@ -223,7 +231,9 @@ def run_full_audit():
                             old_flags = current["flags"]
                             old_text = old_raw
 
-                        content_changed = old_text != current["text"]
+                        old_counter = Counter(old_text.splitlines())
+                        new_counter = Counter(current["text"].splitlines())
+                        content_changed = old_counter != new_counter
                         flags_changed = old_flags != current["flags"]
 
                         if content_changed or flags_changed:
