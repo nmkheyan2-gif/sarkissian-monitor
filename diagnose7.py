@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup, NavigableString
 
-URL = "https://www.sarkissian.ru/product/serebryanoe-kole-eliksir-smelosti/"
+URL = "https://www.sarkissian.ru/catalog/sergi/turmalin/"
 
 headers = {
     "User-Agent": (
