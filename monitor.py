@@ -24,6 +24,8 @@ RETRY_BACKOFF = 3       # վրկ, ամեն retry-ի հետ աճում է (3, 6, 
 WIDGET_SELECTORS = {
     "menuTop": "nav.menuTop",              # ամբողջ mega-menu (նավ. + ապրանքային preview)
     "bx_filter_block": "div.bx-filter-block",  # Bitrix Smart Filter widget
+    "pohozj": "div.pohozj",                # «Популярные украшения» widget
+    "perelinkovka": "div.perelinkovka",    # «Похожие украшения» widget
 }
 
 
