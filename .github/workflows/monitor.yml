@@ -1,7 +1,7 @@
-name: Website Monitor
+#name: Website Monitor
 
-on:
-  schedule:
+#on:
+  #schedule:
     # Ամեն օր՝ 08:00 Երևանի ժամանակով (UTC+4, ամռանը UTC+4)
     # cron-ը UTC-ով է, ուստի 04:00 UTC = 08:00 Yerevan
     - cron: "0 4 * * *"
